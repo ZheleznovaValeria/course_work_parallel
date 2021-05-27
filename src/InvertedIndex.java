@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class InvertedIndex {
 
@@ -29,11 +30,12 @@ public class InvertedIndex {
             "what", "when", "where", "which", "while", "who", "whom", "why",
             "will", "with", "would", "yet", "you", "your");
 
-    Map<String, List<Tuple>> index = new HashMap<String, List<Tuple>>();
+    ConcurrentHashMap<String, List<Tuple>> index = new ConcurrentHashMap<String, List<Tuple>>();
     List<String> files = new ArrayList<String>();
 
 
     public void indexFile(File file) throws IOException {
+        String filePath = file.getPath();
         int fileno = files.indexOf(file.getPath());
         if (fileno == -1) {
             files.add(file.getPath());
@@ -54,7 +56,7 @@ public class InvertedIndex {
                     idx = new LinkedList<Tuple>();
                     index.put(word, idx);
                 }
-                idx.add(new Tuple(fileno, pos));
+                idx.add(new Tuple(filePath, fileno, pos));
             }
         }
         System.out.println("indexed " + file.getPath() + " " + pos + " words");
@@ -96,7 +98,7 @@ public class InvertedIndex {
         return results;
     }
 
-    public static void main() {
+    public static void main(String[] args) {
         pathList.add("src/resources/test/neg/");
         pathList.add("src/resources/test/pos/");
         pathList.add("src/resources/train/neg/");
@@ -113,16 +115,6 @@ public class InvertedIndex {
             idx.search(Arrays.asList(files.get(0).split(",")));
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private class Tuple {
-        private int fileno;
-        private int position;
-
-        public Tuple(int fileno, int position) {
-            this.fileno = fileno;
-            this.position = position;
         }
     }
 }
