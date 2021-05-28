@@ -1,14 +1,14 @@
+
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -36,10 +36,10 @@ public class InvertedIndex {
 
     public void indexFile(File file) throws IOException {
         String filePath = file.getPath();
-        int fileno = files.indexOf(file.getPath());
-        if (fileno == -1) {
+        int fileNo = files.indexOf(file.getPath());
+        if (fileNo == -1) {
             files.add(file.getPath());
-            fileno = files.size() - 1;
+            fileNo = files.size() - 1;
         }
 
         int pos = 0;
@@ -56,7 +56,7 @@ public class InvertedIndex {
                     idx = new LinkedList<Tuple>();
                     index.put(word, idx);
                 }
-                idx.add(new Tuple(filePath, fileno, pos));
+                idx.add(new Tuple(filePath, fileNo, pos));
             }
         }
         System.out.println("indexed " + file.getPath() + " " + pos + " words");
@@ -69,7 +69,7 @@ public class InvertedIndex {
             List<Tuple> idx = index.get(word);
             if (idx != null) {
                 for (Tuple t : idx) {
-                    answer.add(files.get(t.fileno));
+                    answer.add(files.get(t.fileNo));
                 }
             }
             System.out.print(word);
@@ -98,23 +98,4 @@ public class InvertedIndex {
         return results;
     }
 
-    public static void main(String[] args) {
-        pathList.add("src/resources/test/neg/");
-        pathList.add("src/resources/test/pos/");
-        pathList.add("src/resources/train/neg/");
-        pathList.add("src/resources/train/pos/");
-        pathList.add("src/resources/train/unsup/");
-
-        List<String> files = getFileNamesList(pathList);
-
-        try {
-            InvertedIndex idx = new InvertedIndex();
-            for (int i = 1; i < files.size(); i++) {
-                idx.indexFile(new File(files.get(i)));
-            }
-            idx.search(Arrays.asList(files.get(0).split(",")));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
