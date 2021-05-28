@@ -1,10 +1,12 @@
 package client;
 
+import server.ClientHandler;
+
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 
-public class Client {
+public class Client extends ClientHandler {
 
     private static Socket clientSocket;
     private static BufferedReader reader;

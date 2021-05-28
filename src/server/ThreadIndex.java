@@ -15,7 +15,6 @@ class ThreadIndex extends Thread{
     private InvertedIndex index;
     private final int startIndex;
     private final int endIndex;
-    private final List<String> fileNames = new ArrayList<String>();
 
     public ThreadIndex(List<String> fileNamesList, InvertedIndex index, int startIndex, int endIndex) { //конструктор класу, приймає дані для обчислень
         this.fileNamesList = fileNamesList;
