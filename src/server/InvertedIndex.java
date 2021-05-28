@@ -62,7 +62,8 @@ public class InvertedIndex {
         System.out.println("indexed " + file.getPath() + " " + pos + " words");
     }
 
-    public void search(List<String> words) {
+    public String search(List<String> words) {
+        String result = "";
         for (String _word : words) {
             Set<String> answer = new HashSet<String>();
             String word = _word.toLowerCase();
@@ -72,12 +73,12 @@ public class InvertedIndex {
                     answer.add(files.get(t.fileNo));
                 }
             }
-            System.out.print(word);
+            result += word;
             for (String f : answer) {
-                System.out.print(" " + f);
+                result += (" " + f);
             }
-            System.out.println("");
         }
+        return result;
     }
 
     static ArrayList<String> pathList = new ArrayList<String>();

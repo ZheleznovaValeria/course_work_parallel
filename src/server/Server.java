@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.*;
+import java.net.*;
 
 public class Server {
 
@@ -43,6 +45,11 @@ public class Server {
 //            threadArray[i]!!.join()
 //        }
 //    }
+    private static Socket clientSocket;
+    private static ServerSocket server;
+    private static BufferedReader in;
+    private static BufferedWriter out;
+
     static ArrayList<String> pathList = new ArrayList<String>();
 
     public static void parallelIndexing(int threadsNumber, List<String> fileNamesList, InvertedIndex index) throws InterruptedException {
@@ -68,14 +75,50 @@ public class Server {
 
         List<String> files = InvertedIndex.getFileNamesList(pathList);
         int threadsNumber = 10;
+        InvertedIndex idx = new InvertedIndex();
 
         try {
-            InvertedIndex idx = new InvertedIndex();
             parallelIndexing(threadsNumber, files, idx);
-            idx.search(Arrays.asList(files.get(0).split(",")));
+//            idx.search(Arrays.asList(files.get(0).split(",")));
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        try{
+            try{
+                server = new ServerSocket(3000);
+                System.out.println("Server connected");
+                clientSocket = server.accept();
+                System.out.println("Client is connected");
+                try{
+                    String clientWord;
+                    in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                    out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+                    out.write("All files are indexed\n");
+                    out.flush();
+                    out.write("Write words you wanna search separated by commas: \n");
+                    out.flush();
+                    clientWord = in.readLine();
+                    String result = idx.search(Arrays.asList(clientWord.split(",")));
+                    out.write("RESULT OF SEARCHING: \n");
+                    out.flush();
+                    out.write(result + "\n");
+                    out.flush();
+
+                } finally {
+                    clientSocket.close();
+                    in.close();
+                    out.close();
+                }
+            } finally {
+                System.out.println("Server is closed!");
+                server.close();
+            }
+        } catch (IOException e){
+            System.err.println("Client has not connected");
+        }
+
+
     }
 
 }
