@@ -36,25 +36,4 @@ class ThreadIndex extends Thread{
         }
     }
 
-//    private void indexFile (String fileName) throws IOException {
-//        int fileNo = fileNamesList.indexOf(fileName);
-//        if (Arrays.asList(fileNames).contains(fileName)){
-//            System.out.println(fileName + " already indexed");
-//        }
-//
-//        fileNames.add(fileName);
-//        List<String> allLines = Files.readAllLines(Paths.get(fileName));
-//        for (String line : allLines) {
-//            var posIndex = 0;
-//            String splitter = "\\W+";
-//            for (var word : line.toLowerCase().split(splitter)) {
-//                var locations = index.computeIfAbsent(word, k -> new ArrayList<Tuple>());
-//                locations.add(new Tuple(fileName, fileNo, posIndex++));
-//            }
-//        }
-//
-//        System.out.println(fileName + " has been indexed");
-//    }
-
-
 }
