@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Server {
 
@@ -63,8 +64,11 @@ public class Server {
         pathList.add("src/resources/train/unsup/");
 
         List<String> files = InvertedIndex.getFileNamesList(pathList);
-        int threadsNumber = 10;
         InvertedIndex idx = new InvertedIndex();
+
+        System.out.println("Enter number of threads:");
+        Scanner consoleIn = new Scanner(System.in);
+        int threadsNumber = consoleIn.nextInt();
 
         try {
             int size = files.size();
