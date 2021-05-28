@@ -1,5 +1,7 @@
 package server;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +14,37 @@ public class Server {
 
     static ArrayList<String> pathList = new ArrayList<>();
 
-    public static void parallelIndexing(int threadsNumber, List<String> fileNamesList, InvertedIndex index) throws InterruptedException {
+    public static void testIndexing (List<String> fileNamesList, InvertedIndex index) throws InterruptedException {
         var size = fileNamesList.size();
+        int maxNumThreads = 300;
+        int step = 15;
+        StringBuilder table = new StringBuilder("1\t");
+        for (int num = 500; num <= size; num += 250){
+            Instant start = Instant.now();
+            parallelIndexing(1, fileNamesList, index, size);
+            Instant finish = Instant.now();
+            long timeElapsed = Duration.between(start, finish).toMillis();
+            table.append(timeElapsed).append("\t");
+        }
+        table.append("\n");
+
+        for (int i = 2; i <= maxNumThreads; i += step){
+            table.append(i).append("\t");
+            for (int num = 500; num <= size; num += 250){
+                Instant start = Instant.now();
+                parallelIndexing(i, fileNamesList, index, size);
+                Instant finish = Instant.now();
+                long timeElapsed = Duration.between(start, finish).toMillis();
+                table.append(timeElapsed).append("\t");
+            }
+            table.append("\n");
+        }
+        System.out.println(table);
+        System.out.println("Indexed with " + maxNumThreads + " threads with step " + step );
+
+    }
+
+    public static void parallelIndexing(int threadsNumber, List<String> fileNamesList, InvertedIndex index, int size) throws InterruptedException {
         List<ThreadIndex> threadArray = Arrays.asList(new ThreadIndex[threadsNumber]);
         for (int i = 0; i < threadsNumber; i++){
             threadArray.set(i, new ThreadIndex(fileNamesList, index, (size / threadsNumber) * i, i == (threadsNumber - 1) ? size : size / threadsNumber * (i + 1)));
@@ -36,7 +67,9 @@ public class Server {
         InvertedIndex idx = new InvertedIndex();
 
         try {
-            parallelIndexing(threadsNumber, files, idx);
+            int size = files.size();
+//            parallelIndexing(threadsNumber, files, idx, size);
+            testIndexing(files, idx);
             System.out.println("All files are indexed:)");
         } catch (Exception e) {
             e.printStackTrace();
