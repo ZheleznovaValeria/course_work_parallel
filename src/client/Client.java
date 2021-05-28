@@ -13,6 +13,34 @@ public class Client {
     private static BufferedReader in;
     private static BufferedWriter out;
 
+    private static void clientLoop(BufferedReader reader, BufferedReader in, BufferedWriter out, String serverWord, String clientWord) throws IOException {
+        while (true){
+            serverWord = in.readLine();
+            System.out.println(serverWord);
+            serverWord = in.readLine();
+            System.out.println(serverWord);
+            clientWord = reader.readLine();
+            out.write(clientWord + "\n");
+            out.flush();
+            serverWord = in.readLine();
+            System.out.println(serverWord);
+            serverWord = in.readLine();
+            String[] serverWords = new ArrayList<String>().toArray(new String[0]);
+            serverWords = serverWord.split(" ");
+            for (String _word : serverWords) {
+                System.out.println(_word);
+            }
+            serverWord = in.readLine();
+            System.out.println(serverWord);
+            clientWord = reader.readLine();
+            out.write(clientWord + "\n");
+            out.flush();
+            if (clientWord.equals("1")){
+                break;
+            }
+        }
+    }
+
 
     public static void main(String[] args){
         try{
@@ -21,24 +49,9 @@ public class Client {
                 reader = new BufferedReader(new InputStreamReader(System.in));
                 in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                String serverWord;
-                String clientWord;
-                serverWord = in.readLine();
-                System.out.println(serverWord);
-                serverWord = in.readLine();
-                System.out.println(serverWord);
-                clientWord = reader.readLine();
-                out.write(clientWord + "\n");
-                out.flush();
-                serverWord = in.readLine();
-                System.out.println(serverWord);
-                serverWord = in.readLine();
-                String[] serverWords = new ArrayList<String>().toArray(new String[0]);
-                serverWords = serverWord.split(" ");
-                for (String _word : serverWords) {
-                    System.out.println(_word);
-                }
-
+                String serverWord = null;
+                String clientWord = null;
+                clientLoop(reader, in, out, serverWord, clientWord);
             } finally {
                 System.out.println("Client was closed");
                 clientSocket.close();

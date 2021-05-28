@@ -64,6 +64,27 @@ public class Server {
         }
     }
 
+    private static void serverLoop(BufferedReader in, BufferedWriter out, String clientWord, InvertedIndex idx) throws IOException {
+        while(true){
+            out.write("All files are indexed\n");
+            out.flush();
+            out.write("Write words you wanna search separated by commas: \n");
+            out.flush();
+            clientWord = in.readLine();
+            String result = idx.search(Arrays.asList(clientWord.split(",")));
+            out.write("RESULT OF SEARCHING: \n");
+            out.flush();
+            out.write(result + "\n");
+            out.flush();
+            out.write("Wanna quit? 1 - Yes, 2 - No\n");
+            out.flush();
+            clientWord = in.readLine();
+            if (clientWord.equals("1")){
+                break;
+            }
+        }
+    }
+
 
 
     public static void main(String[] args) {
@@ -83,7 +104,6 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         try{
             try{
                 server = new ServerSocket(3000);
@@ -91,20 +111,10 @@ public class Server {
                 clientSocket = server.accept();
                 System.out.println("Client is connected");
                 try{
-                    String clientWord;
+                    String clientWord = null;
                     in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     out = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-                    out.write("All files are indexed\n");
-                    out.flush();
-                    out.write("Write words you wanna search separated by commas: \n");
-                    out.flush();
-                    clientWord = in.readLine();
-                    String result = idx.search(Arrays.asList(clientWord.split(",")));
-                    out.write("RESULT OF SEARCHING: \n");
-                    out.flush();
-                    out.write(result + "\n");
-                    out.flush();
-
+                    serverLoop(in, out, clientWord, idx);
                 } finally {
                     clientSocket.close();
                     in.close();
