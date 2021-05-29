@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 class ThreadIndex extends Thread{
 
     private List<String> fileNamesList = new ArrayList<String>();
-    private InvertedIndex index;
+    private final InvertedIndex index;
     private final int startIndex;
     private final int endIndex;
 
