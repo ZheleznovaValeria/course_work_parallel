@@ -72,8 +72,8 @@ public class Server {
 
         try {
             int size = files.size();
-//            parallelIndexing(threadsNumber, files, idx, size);
-            testIndexing(files, idx);
+            parallelIndexing(threadsNumber, files, idx, size);
+            /*testIndexing(files, idx);*/
             System.out.println("All files are indexed:)");
         } catch (Exception e) {
             e.printStackTrace();

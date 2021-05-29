@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class InvertedIndex {
 
-    List<String> stopwords = Arrays.asList("a", "able", "about",
+    List<String> stopWords = Arrays.asList("a", "able", "about",
             "across", "after", "all", "almost", "also", "am", "among", "an",
             "and", "any", "are", "as", "at", "be", "because", "been", "but",
             "by", "can", "cannot", "could", "dear", "did", "do", "does",
@@ -41,7 +41,6 @@ public class InvertedIndex {
             files.add(file.getPath());
             fileNo = files.size() - 1;
         }
-
         int pos = 0;
         BufferedReader reader = new BufferedReader(new FileReader(file));
         for (String line = reader.readLine(); line != null; line = reader
@@ -49,7 +48,7 @@ public class InvertedIndex {
             for (String _word : line.split("\\W+")) {
                 String word = _word.toLowerCase();
                 pos++;
-                if (stopwords.contains(word))
+                if (stopWords.contains(word))
                     continue;
                 List<Tuple> idx = index.get(word);
                 if (idx == null) {
