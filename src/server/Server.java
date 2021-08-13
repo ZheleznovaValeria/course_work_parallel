@@ -17,8 +17,8 @@ public class Server {
 
     public static void testIndexing (List<String> fileNamesList, InvertedIndex index) throws InterruptedException {
         var size = fileNamesList.size();
-        int maxNumThreads = 20;
-        int step = 2;
+        int maxNumThreads = 300;
+        int step = 15;
         StringBuilder table = new StringBuilder("1\t");
         for (int num = 500; num <= size; num += 250){
             Instant start = Instant.now();
